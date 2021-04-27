@@ -85,6 +85,8 @@ window.onload = function init() {
         }
     };
 
+    //Arrow Keys
+    document.onkeydown = checkKey;
 
 
 
@@ -95,11 +97,25 @@ window.onload = function init() {
 }
 
 const animate = function () {
-    cube.position.y -= speed * 0.01;
 
+    if (cube.position.y > -5) {
+        cube.position.y -= speed * 0.01;
+    }
     requestAnimationFrame(animate)
     renderer.render(scene, camera);
 };
+
+function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '37') {
+        cube.position.x -= 1;
+    } else if (e.keyCode == '39') {
+        cube.position.x += 1;
+    }
+
+}
 
 
 function onWindowResize() {

@@ -1,6 +1,8 @@
 import * as THREE from '../build/three.module.js';
 
-import { OrbitControls } from './jsm/controls/OrbitControls.js';
+import {
+    OrbitControls
+} from './jsm/controls/OrbitControls.js';
 
 let scene, camera, renderer;
 let speed = 1;
@@ -11,9 +13,9 @@ window.onload = function init() {
 
     const container = document.getElementById('container');
 
-	//Set up camera
-	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 100 );
-	camera.position.set( 3, 2, 16 );	// obj.position.set is for moving obj around the scene.  Not related to the camera specifically
+    //Set up camera
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(3, 2, 16); // obj.position.set is for moving obj around the scene.  Not related to the camera specifically
 
 
     //Set up Scene
@@ -22,39 +24,42 @@ window.onload = function init() {
     //scene.fog = new THREE.Fog( 0xa0a0a0, 2, 20 );
 
 
-	//Lighting
-	const hemiLight = new THREE.HemisphereLight( 0xff0000, 0x000000 ); //params: Sky color, ground color, [intensity = 1.0]
-	hemiLight.position.set( 0, 20, 0 );
-	scene.add( hemiLight );
+    //Lighting
+    const hemiLight = new THREE.HemisphereLight(0xff0000, 0x000000); //params: Sky color, ground color, [intensity = 1.0]
+    hemiLight.position.set(0, 20, 0);
+    scene.add(hemiLight);
 
-	const dirLight = new THREE.DirectionalLight( 0xffffff );
-	dirLight.position.set( 6, 10, 3 );
-	dirLight.castShadow = true;
-	dirLight.shadow.camera.top = 1;
-	dirLight.shadow.camera.bottom = - 1;
-	dirLight.shadow.camera.left = - 1;
-	dirLight.shadow.camera.right = 1;
-	dirLight.shadow.camera.near = 0.1;
-	dirLight.shadow.camera.far = 20;
-	scene.add( dirLight );
-
-
-	//Plane Geometry
-	const ground = new THREE.Mesh( new THREE.PlaneGeometry( 50, 50 ), new THREE.MeshPhongMaterial( { color: 0x999999, depthWrite: false } ) );
-	ground.rotation.x = - Math.PI / 2;
-	ground.receiveShadow = true;
-	scene.add( ground );
-
-	const grid = new THREE.GridHelper( 50, 50, 0x888888, 0x888888 );
-	scene.add( grid );
+    const dirLight = new THREE.DirectionalLight(0xffffff);
+    dirLight.position.set(6, 10, 3);
+    dirLight.castShadow = true;
+    dirLight.shadow.camera.top = 1;
+    dirLight.shadow.camera.bottom = -1;
+    dirLight.shadow.camera.left = -1;
+    dirLight.shadow.camera.right = 1;
+    dirLight.shadow.camera.near = 0.1;
+    dirLight.shadow.camera.far = 20;
+    scene.add(dirLight);
 
 
-	//Box Geometry
-	const geometry = new THREE.BoxGeometry(1,1,1);
-	const material = new THREE.MeshPhongMaterial( )
-	material.color = new THREE.Color( 0xff0000 );
-	cube = new THREE.Mesh( geometry, material );
-	cube.castShadow = true;
+    //Plane Geometry
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.MeshPhongMaterial({
+        color: 0x999999,
+        depthWrite: false
+    }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    const grid = new THREE.GridHelper(50, 50, 0x888888, 0x888888);
+    scene.add(grid);
+
+
+    //Box Geometry
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshPhongMaterial()
+    material.color = new THREE.Color(0xff0000);
+    cube = new THREE.Mesh(geometry, material);
+    cube.castShadow = true;
     cube.position.x = 0;
     cube.position.y = 6;
     cube.position.z = 0;
@@ -98,9 +103,6 @@ window.onload = function init() {
     //Arrow Keys
     document.onkeydown = checkKey;
 
-
-
-
     window.addEventListener('resize', onWindowResize);
 
     animate();
@@ -108,7 +110,7 @@ window.onload = function init() {
 
 const animate = function () {
 
-    if (cube.position.y > -5) {
+    if (cube.position.y > 0.5) {
         cube.position.y -= speed * 0.01;
     }
     requestAnimationFrame(animate)

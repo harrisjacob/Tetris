@@ -1,22 +1,26 @@
 import * as THREE from '../build/three.module.js';
 
-import { OrbitControls } from './jsm/controls/OrbitControls.js';
+import {
+    OrbitControls
+} from './jsm/controls/OrbitControls.js';
 
 let scene, camera, renderer;
+let speed = 1;
 
 window.onload = function init() {
 
 
-	const container = document.getElementById( 'container' );
+    const container = document.getElementById('container');
 
 	//Set up camera
 	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 100 );
 	camera.position.set( 3, 2, 16 );	// obj.position.set is for moving obj around the scene.  Not related to the camera specifically
 
-	//Set up Scene
-	scene = new THREE.Scene();
-	scene.background = new THREE.Color( 0xa0a0a0 );
-	//scene.fog = new THREE.Fog( 0xa0a0a0, 2, 20 );
+
+    //Set up Scene
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xa0a0a0);
+    //scene.fog = new THREE.Fog( 0xa0a0a0, 2, 20 );
 
 
 	//Lighting
@@ -56,40 +60,58 @@ window.onload = function init() {
 	scene.add( cube );
 
 
-	//Renderer
-	renderer = new THREE.WebGLRenderer( { antialias: true } );
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.outputEncoding = THREE.sRGBEncoding;
-	renderer.shadowMap.enabled = true;
-	container.appendChild( renderer.domElement );
 
-	//Trackball
-	const controls = new OrbitControls( camera, renderer.domElement );
-	controls.target.set( 0, 0.1, 0 );
-	controls.update();
-	controls.minDistance = 0.5;
-	controls.maxDistance = 10;
-	controls.maxPolarAngle = 0.5 * Math.PI;
+    //Renderer
+    renderer = new THREE.WebGLRenderer({
+        antialias: true
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.shadowMap.enabled = true;
+    container.appendChild(renderer.domElement);
+
+    //Trackball
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 0.1, 0);
+    controls.update();
+    //controls.minDistance = 0.5;
+    //controls.maxDistance = 10;
+    controls.maxPolarAngle = 0.5 * Math.PI;
+
+    //Buttons
+    document.getElementById("plus").onclick = function () {
+        console.log("increase speed");
+        speed += 1;
+    };
+
+    document.getElementById("minus").onclick = function () {
+        console.log("decrease speed");
+        if (speed > 1) {
+            speed -= 1;
+        }
+    };
 
 
 
-	window.addEventListener( 'resize', onWindowResize );
 
-	animate();
+
+    window.addEventListener('resize', onWindowResize);
+
+    animate();
 }
 
 const animate = function () {
 
-	requestAnimationFrame( animate )
-	renderer.render( scene, camera );
+    requestAnimationFrame(animate)
+    renderer.render(scene, camera);
 };
 
 function onWindowResize() {
 
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
 
-	renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
 }

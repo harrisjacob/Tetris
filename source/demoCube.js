@@ -1,11 +1,10 @@
 import * as THREE from '../build/three.module.js';
 
-import {
-    OrbitControls
-} from './jsm/controls/OrbitControls.js';
+import { OrbitControls } from './jsm/controls/OrbitControls.js';
 
 let scene, camera, renderer;
 let speed = 1;
+var cube;
 
 window.onload = function init() {
 
@@ -52,12 +51,16 @@ window.onload = function init() {
 
 	//Box Geometry
 	const geometry = new THREE.BoxGeometry(1,1,1);
-	geometry.applyMatrix4( new THREE.Matrix4().makeTranslation( 0, 0.5, 0 ) );
 	const material = new THREE.MeshPhongMaterial( )
 	material.color = new THREE.Color( 0xff0000 );
-	const cube = new THREE.Mesh( geometry, material );
+	cube = new THREE.Mesh( geometry, material );
 	cube.castShadow = true;
-	scene.add( cube );
+    cube.position.x = 0;
+    cube.position.y = 6;
+    cube.position.z = 0;
+
+    scene.add(cube);
+
 
 
 
@@ -81,14 +84,14 @@ window.onload = function init() {
 
     //Buttons
     document.getElementById("plus").onclick = function () {
-        console.log("increase speed");
-        speed += 1;
+        console.log(speed);
+        speed += 0.01;
     };
 
     document.getElementById("minus").onclick = function () {
-        console.log("decrease speed");
-        if (speed > 1) {
-            speed -= 1;
+        console.log(speed);
+        if (speed > 0.0001) {
+            speed -= 0.01;
         }
     };
 
@@ -102,10 +105,12 @@ window.onload = function init() {
 }
 
 const animate = function () {
+    cube.position.y -= speed * 0.01;
 
     requestAnimationFrame(animate)
     renderer.render(scene, camera);
 };
+
 
 function onWindowResize() {
 

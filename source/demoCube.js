@@ -1,8 +1,6 @@
 import * as THREE from '../build/three.module.js';
 
-import {
-    OrbitControls
-} from './jsm/controls/OrbitControls.js';
+import { OrbitControls } from './jsm/controls/OrbitControls.js';
 
 let scene, camera, renderer;
 let speed = 1;
@@ -13,9 +11,10 @@ window.onload = function init() {
 
     const container = document.getElementById('container');
 
-    //Set up camera
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(3, 2, 16);
+	//Set up camera
+	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 100 );
+	camera.position.set( 3, 2, 16 );	// obj.position.set is for moving obj around the scene.  Not related to the camera specifically
+
 
     //Set up Scene
     scene = new THREE.Scene();
@@ -23,34 +22,45 @@ window.onload = function init() {
     //scene.fog = new THREE.Fog( 0xa0a0a0, 2, 20 );
 
 
-    //Lighting
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
-    hemiLight.position.set(0, 20, 0);
-    scene.add(hemiLight);
+	//Lighting
+	const hemiLight = new THREE.HemisphereLight( 0xff0000, 0x000000 ); //params: Sky color, ground color, [intensity = 1.0]
+	hemiLight.position.set( 0, 20, 0 );
+	scene.add( hemiLight );
 
-    const dirLight = new THREE.DirectionalLight(0xffffff);
-    dirLight.position.set(5, 5, 0);
-    dirLight.castShadow = true;
-    dirLight.shadow.camera.top = 1;
-    dirLight.shadow.camera.bottom = -1;
-    dirLight.shadow.camera.left = -1;
-    dirLight.shadow.camera.right = 1;
-    dirLight.shadow.camera.near = 0.1;
-    dirLight.shadow.camera.far = 20;
-    scene.add(dirLight);
+	const dirLight = new THREE.DirectionalLight( 0xffffff );
+	dirLight.position.set( 6, 10, 3 );
+	dirLight.castShadow = true;
+	dirLight.shadow.camera.top = 1;
+	dirLight.shadow.camera.bottom = - 1;
+	dirLight.shadow.camera.left = - 1;
+	dirLight.shadow.camera.right = 1;
+	dirLight.shadow.camera.near = 0.1;
+	dirLight.shadow.camera.far = 20;
+	scene.add( dirLight );
 
 
-    //Geometry
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({
-        color: 0xffffff
-    });
-    cube = new THREE.Mesh(geometry, material);
+	//Plane Geometry
+	const ground = new THREE.Mesh( new THREE.PlaneGeometry( 50, 50 ), new THREE.MeshPhongMaterial( { color: 0x999999, depthWrite: false } ) );
+	ground.rotation.x = - Math.PI / 2;
+	ground.receiveShadow = true;
+	scene.add( ground );
+
+	const grid = new THREE.GridHelper( 50, 50, 0x888888, 0x888888 );
+	scene.add( grid );
+
+
+	//Box Geometry
+	const geometry = new THREE.BoxGeometry(1,1,1);
+	const material = new THREE.MeshPhongMaterial( )
+	material.color = new THREE.Color( 0xff0000 );
+	cube = new THREE.Mesh( geometry, material );
+	cube.castShadow = true;
     cube.position.x = 0;
     cube.position.y = 6;
     cube.position.z = 0;
 
     scene.add(cube);
+
 
 
 
@@ -68,8 +78,8 @@ window.onload = function init() {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 0.1, 0);
     controls.update();
-    controls.minDistance = 0.5;
-    controls.maxDistance = 10;
+    //controls.minDistance = 0.5;
+    //controls.maxDistance = 10;
     controls.maxPolarAngle = 0.5 * Math.PI;
 
     //Buttons

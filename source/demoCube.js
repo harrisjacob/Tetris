@@ -6,6 +6,7 @@ import {
 
 let scene, camera, renderer;
 let speed = 1;
+var cube;
 
 window.onload = function init() {
 
@@ -44,7 +45,11 @@ window.onload = function init() {
     const material = new THREE.MeshBasicMaterial({
         color: 0xffffff
     });
-    const cube = new THREE.Mesh(geometry, material);
+    cube = new THREE.Mesh(geometry, material);
+    cube.position.x = 0;
+    cube.position.y = 6;
+    cube.position.z = 0;
+
     scene.add(cube);
 
 
@@ -69,14 +74,14 @@ window.onload = function init() {
 
     //Buttons
     document.getElementById("plus").onclick = function () {
-        console.log("increase speed");
-        speed += 1;
+        console.log(speed);
+        speed += 0.01;
     };
 
     document.getElementById("minus").onclick = function () {
-        console.log("decrease speed");
-        if (speed > 1) {
-            speed -= 1;
+        console.log(speed);
+        if (speed > 0.0001) {
+            speed -= 0.01;
         }
     };
 
@@ -90,10 +95,12 @@ window.onload = function init() {
 }
 
 const animate = function () {
+    cube.position.y -= speed * 0.01;
 
     requestAnimationFrame(animate)
     renderer.render(scene, camera);
 };
+
 
 function onWindowResize() {
 

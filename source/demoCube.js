@@ -36,13 +36,14 @@ window.onload = function init() {
 	scene.add( dirLight );
 
 
+	//Geometry
 	const geometry = new THREE.BoxGeometry();
 	const material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 	const cube = new THREE.Mesh( geometry, material );
 	scene.add( cube );
 
 
-
+	//Renderer
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.setPixelRatio( window.devicePixelRatio );
@@ -50,8 +51,7 @@ window.onload = function init() {
 	renderer.shadowMap.enabled = true;
 	container.appendChild( renderer.domElement );
 
-	//
-
+	//Trackball
 	const controls = new OrbitControls( camera, renderer.domElement );
 	controls.target.set( 0, 0.1, 0 );
 	controls.update();
@@ -59,7 +59,7 @@ window.onload = function init() {
 	controls.maxDistance = 10;
 	controls.maxPolarAngle = 0.5 * Math.PI;
 
-	//
+
 
 	window.addEventListener( 'resize', onWindowResize );
 

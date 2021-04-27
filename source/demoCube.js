@@ -11,7 +11,7 @@ window.onload = function init() {
 
 	//Set up camera
 	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 100 );
-	camera.position.set( 3, 2, 16 );
+	camera.position.set( 3, 2, 16 );	// obj.position.set is for moving obj around the scene.  Not related to the camera specifically
 
 	//Set up Scene
 	scene = new THREE.Scene();
@@ -20,12 +20,12 @@ window.onload = function init() {
 
 
 	//Lighting
-	const hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
+	const hemiLight = new THREE.HemisphereLight( 0xff0000, 0x000000 ); //params: Sky color, ground color, [intensity = 1.0]
 	hemiLight.position.set( 0, 20, 0 );
 	scene.add( hemiLight );
 
 	const dirLight = new THREE.DirectionalLight( 0xffffff );
-	dirLight.position.set( 5, 5, 0 );
+	dirLight.position.set( 6, 10, 3 );
 	dirLight.castShadow = true;
 	dirLight.shadow.camera.top = 1;
 	dirLight.shadow.camera.bottom = - 1;
@@ -36,10 +36,23 @@ window.onload = function init() {
 	scene.add( dirLight );
 
 
-	//Geometry
-	const geometry = new THREE.BoxGeometry();
-	const material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+	//Plane Geometry
+	const ground = new THREE.Mesh( new THREE.PlaneGeometry( 50, 50 ), new THREE.MeshPhongMaterial( { color: 0x999999, depthWrite: false } ) );
+	ground.rotation.x = - Math.PI / 2;
+	ground.receiveShadow = true;
+	scene.add( ground );
+
+	const grid = new THREE.GridHelper( 50, 50, 0x888888, 0x888888 );
+	scene.add( grid );
+
+
+	//Box Geometry
+	const geometry = new THREE.BoxGeometry(1,1,1);
+	geometry.applyMatrix4( new THREE.Matrix4().makeTranslation( 0, 0.5, 0 ) );
+	const material = new THREE.MeshPhongMaterial( )
+	material.color = new THREE.Color( 0xff0000 );
 	const cube = new THREE.Mesh( geometry, material );
+	cube.castShadow = true;
 	scene.add( cube );
 
 

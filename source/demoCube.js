@@ -1,12 +1,11 @@
 import * as THREE from '../build/three.module.js';
 
-import {
-    OrbitControls
-} from './jsm/controls/OrbitControls.js';
+import { OrbitControls } from './jsm/controls/OrbitControls.js';
+import PieceT from './components/PieceT.js';
 
 let scene, camera, renderer;
 let speed = 1;
-var rotateCount = 0;
+//var rotateCount = 0;
 let ladA;
 
 window.onload = function init() {
@@ -54,45 +53,9 @@ window.onload = function init() {
     const grid = new THREE.GridHelper(50, 50, 0x888888, 0x888888);
     scene.add(grid);
 
-    //
-    //    //Box Geometry
-    //    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    //    const material = new THREE.MeshPhongMaterial()
-    //    material.color = new THREE.Color(0xff0000);
-    //
-    //    const material1 = new THREE.MeshPhongMaterial()
-    //    material1.color = new THREE.Color(0x100022);
-    //
-    //    cubeA = new THREE.Mesh(geometry, material1);
-    //    cubeA.castShadow = true;
-    //    cubeA.position.x = 0;
-    //    cubeA.position.y = 6;
-    //    cubeA.position.z = 0;
-    //
-    //    cubeB = new THREE.Mesh(geometry, material);
-    //    cubeB.castShadow = true;
-    //    cubeB.position.x = 0;
-    //    cubeB.position.y = 7;
-    //    cubeB.position.z = 0;
-    //
-    //    cubeC = new THREE.Mesh(geometry, material);
-    //    cubeC.castShadow = true;
-    //    cubeC.position.x = 0;
-    //    cubeC.position.y = 8;
-    //    cubeC.position.z = 0;
-    //
-    //    cubeD = new THREE.Mesh(geometry, material);
-    //    cubeD.castShadow = true;
-    //    cubeD.position.x = 1;
-    //    cubeD.position.y = 7;
-    //    cubeD.position.z = 0;
-    //
-    //    scene.add(cubeA);
-    //    scene.add(cubeB);
-    //    scene.add(cubeC);
-    //    scene.add(cubeD);
 
-    ladA = new LadA(scene);
+
+    ladA = new PieceT(scene);
 
 
     //Renderer
@@ -138,7 +101,6 @@ const animate = function () {
 };
 
 function checkKey(e) {
-
     e = e || window.event;
 
     if (e.keyCode == '37') { // left arrow
@@ -146,28 +108,8 @@ function checkKey(e) {
     } else if (e.keyCode == '39') { // right arrow
         ladA.moveRight();
     } else if (e.keyCode == '32') { //space bar
-
-        rotateCount += 1;
-        //var pp, var pm, var mp, var mm
-        switch (rotateCount) {
-            case 1:
-                ladA.rotate1();
-                break;
-            case 2:
-                ladA.rotate2();
-                break;
-            case 3:
-                ladA.rotate3();
-                break;
-            case 4:
-                ladA.rotate4();
-                rotateCount = 0;
-                break;
-            default:
-                break;
-        }
+        ladA.rotate();
     }
-
 }
 
 
@@ -181,125 +123,3 @@ function onWindowResize() {
 
 }
 
-class LadA {
-    constructor(scene) {
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshPhongMaterial()
-        material.color = new THREE.Color(0xff0000);
-
-
-        this.cubeA = new THREE.Mesh(geometry, material);
-        this.cubeA.castShadow = true;
-        this.cubeA.position.x = 0;
-        this.cubeA.position.y = 6;
-        this.cubeA.position.z = 0;
-
-        this.cubeB = new THREE.Mesh(geometry, material);
-        this.cubeB.castShadow = true;
-        this.cubeB.position.x = 0;
-        this.cubeB.position.y = 7;
-        this.cubeB.position.z = 0;
-
-        this.cubeC = new THREE.Mesh(geometry, material);
-        this.cubeC.castShadow = true;
-        this.cubeC.position.x = 0;
-        this.cubeC.position.y = 8;
-        this.cubeC.position.z = 0;
-
-        this.cubeD = new THREE.Mesh(geometry, material);
-        this.cubeD.castShadow = true;
-        this.cubeD.position.x = 1;
-        this.cubeD.position.y = 7;
-        this.cubeD.position.z = 0;
-
-        this.speed = 0.01;
-
-        scene.add(this.cubeA);
-        scene.add(this.cubeB);
-        scene.add(this.cubeC);
-        scene.add(this.cubeD);
-
-    }
-
-    fall() {
-
-        if (this.getMinY() > 0.5) {
-            this.cubeA.position.y -= this.speed;
-            this.cubeB.position.y -= this.speed;
-            this.cubeC.position.y -= this.speed;
-            this.cubeD.position.y -= this.speed;
-        }
-
-    }
-
-
-    rotate1() {
-        this.cubeA.position.x -= 1;
-        this.cubeA.position.y += 1;
-
-        this.cubeC.position.x += 1;
-        this.cubeC.position.y -= 1;
-
-        this.cubeD.position.x -= 1;
-        this.cubeD.position.y -= 1;
-
-    }
-
-    rotate2() {
-        this.cubeA.position.x += 1;
-        this.cubeA.position.y += 1;
-
-        this.cubeD.position.x -= 1;
-        this.cubeD.position.y += 1;
-
-        this.cubeC.position.x -= 1;
-        this.cubeC.position.y -= 1;
-
-    }
-
-    rotate3() {
-        this.cubeA.position.x += 1;
-        this.cubeA.position.y -= 1;
-
-        this.cubeC.position.x -= 1;
-        this.cubeC.position.y += 1;
-
-        this.cubeD.position.x += 1;
-        this.cubeD.position.y += 1;
-
-    }
-
-    rotate4() {
-        this.cubeA.position.x -= 1;
-        this.cubeA.position.y -= 1;
-
-        this.cubeC.position.x += 1;
-        this.cubeC.position.y += 1;
-
-        this.cubeD.position.x += 1;
-        this.cubeD.position.y -= 1;
-    }
-
-    moveLeft() {
-        this.cubeA.position.x -= 1;
-        this.cubeB.position.x -= 1;
-        this.cubeC.position.x -= 1;
-        this.cubeD.position.x -= 1;
-    }
-
-    moveRight() {
-        this.cubeA.position.x += 1;
-        this.cubeB.position.x += 1;
-        this.cubeC.position.x += 1;
-        this.cubeD.position.x += 1;
-    }
-
-    getMinY() {
-
-        return Math.min(this.cubeA.position.y, this.cubeB.position.y, this.cubeC.position.y, this.cubeD.position.y)
-    }
-
-
-
-
-}

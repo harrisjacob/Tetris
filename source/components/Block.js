@@ -7,11 +7,6 @@ export default class Block {
         const material = new THREE.MeshPhongMaterial()
         material.color = new THREE.Color(0xff0000);
 
-        if (x == 1){
-        	material.color = new THREE.Color(0x0000ff);
-        }
-
-
         this.cube = new THREE.Mesh(geometry, material);
         this.cube.position.x = x;
         this.cube.position.y = y;

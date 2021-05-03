@@ -1,11 +1,20 @@
 import * as THREE from '../build/three.module.js';
 
 import { OrbitControls } from './jsm/controls/OrbitControls.js';
+
+//Game Pieces
+import PieceI from './components/PieceI.js';
+import PieceL from './components/PieceL.js';
+import PieceLRev from './components/PieceLRev.js';
+import PieceO from './components/PieceO.js';
 import PieceT from './components/PieceT.js';
+import PieceZ from './components/PieceZ.js';
+import PieceZRev from './components/PieceZRev.js';
+
+
 
 let scene, camera, renderer;
 let speed = 1;
-//var rotateCount = 0;
 let ladA;
 
 window.onload = function init() {
@@ -55,7 +64,7 @@ window.onload = function init() {
 
 
 
-    ladA = new PieceT(scene);
+    ladA = new PieceZRev(scene);
 
 
     //Renderer

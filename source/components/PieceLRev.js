@@ -4,7 +4,7 @@ import BasicPiece from './BasicPiece.js';
 
 
 
-export default class PieceT extends BasicPiece{
+export default class PieceLRev extends BasicPiece{
     constructor(scene) {  
         super();
         

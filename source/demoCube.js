@@ -1,6 +1,8 @@
 import * as THREE from '../build/three.module.js';
 
-import { OrbitControls } from './jsm/controls/OrbitControls.js';
+import {
+    OrbitControls
+} from './jsm/controls/OrbitControls.js';
 
 //Game Pieces
 import PieceI from './components/PieceI.js';
@@ -104,6 +106,7 @@ window.onload = function init() {
 }
 
 const animate = function () {
+    e333333333333333ê334rrr444fffffffrrrrrrrr
     ladA.fall();
     requestAnimationFrame(animate)
     renderer.render(scene, camera);
@@ -112,12 +115,14 @@ const animate = function () {
 function checkKey(e) {
     e = e || window.event;
 
-    if (e.keyCode == '37') { // left arrow
-        ladA.moveLeft();
-    } else if (e.keyCode == '39') { // right arrow
-        ladA.moveRight();
-    } else if (e.keyCode == '32') { //space bar
-        ladA.rotate();
+    if (ladA.getMinY() > 0.5) {
+        if (e.keyCode == '37') { // left arrow
+            ladA.moveLeft();
+        } else if (e.keyCode == '39') { // right arrow
+            ladA.moveRight();
+        } else if (e.keyCode == '32') { //space bar
+            ladA.rotate();
+        }
     }
 }
 
@@ -131,4 +136,3 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 
 }
-

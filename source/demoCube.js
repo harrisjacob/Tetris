@@ -88,7 +88,7 @@ window.onload = function init() {
     container.appendChild(renderer.domElement);
 
     //Trackball
-    const controls = new OrbitControls(camera, renderer.domElement);
+    const controls = new OrbitControls(camera, renderer.domElement, renderer, scene);
     controls.target.set(0, 0.1, 0);
     controls.update();
     //controls.minDistance = 0.5;

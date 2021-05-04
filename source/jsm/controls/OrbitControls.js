@@ -15,7 +15,7 @@ import {
 //    Zoom - middle mouse, or mousewheel / touch: two-finger spread or squish
 //    Pan - right mouse, or left mouse + ctrl/meta/shiftKey, or arrow keys / touch: two-finger move
 
-var OrbitControls = function ( object, domElement ) {
+var OrbitControls = function ( object, domElement, renderer2, scene ) {
 
 	if ( domElement === undefined ) console.warn( 'THREE.OrbitControls: The second parameter "domElement" is now mandatory.' );
 	if ( domElement === document ) console.error( 'THREE.OrbitControls: "document" should not be used as the target "domElement". Please use "renderer.domElement" instead.' );
@@ -941,6 +941,8 @@ var OrbitControls = function ( object, domElement ) {
 
 		}
 
+		renderer2.render(scene, object);
+
 	}
 
 	function onMouseMove( event ) {
@@ -977,6 +979,8 @@ var OrbitControls = function ( object, domElement ) {
 
 		}
 
+		renderer2.render(scene, object);
+
 	}
 
 	function onMouseUp( event ) {
@@ -991,6 +995,8 @@ var OrbitControls = function ( object, domElement ) {
 		scope.dispatchEvent( endEvent );
 
 		state = STATE.NONE;
+
+		renderer2.render(scene, object);
 
 	}
 
@@ -1007,6 +1013,8 @@ var OrbitControls = function ( object, domElement ) {
 
 		scope.dispatchEvent( endEvent );
 
+		renderer2.render(scene, object);
+
 	}
 
 	function onKeyDown( event ) {
@@ -1014,6 +1022,8 @@ var OrbitControls = function ( object, domElement ) {
 		if ( scope.enabled === false || scope.enablePan === false ) return;
 
 		handleKeyDown( event );
+
+		renderer2.render(scene, object);
 
 	}
 
@@ -1101,6 +1111,8 @@ var OrbitControls = function ( object, domElement ) {
 
 		}
 
+		renderer2.render(scene, object);
+
 	}
 
 	function onTouchMove( event ) {
@@ -1157,6 +1169,7 @@ var OrbitControls = function ( object, domElement ) {
 				state = STATE.NONE;
 
 		}
+		renderer2.render(scene, object);
 
 	}
 
@@ -1169,6 +1182,8 @@ var OrbitControls = function ( object, domElement ) {
 		scope.dispatchEvent( endEvent );
 
 		state = STATE.NONE;
+
+		renderer2.render(scene, camera);
 
 	}
 

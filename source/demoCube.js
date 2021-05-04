@@ -4,9 +4,20 @@ import {
     OrbitControls
 } from './jsm/controls/OrbitControls.js';
 
+//Game Pieces
+import PieceI from './components/PieceI.js';
+import PieceL from './components/PieceL.js';
+import PieceLRev from './components/PieceLRev.js';
+import PieceO from './components/PieceO.js';
+import PieceT from './components/PieceT.js';
+import PieceZ from './components/PieceZ.js';
+import PieceZRev from './components/PieceZRev.js';
+
+
+
 let scene, camera, renderer;
 let speed = 1;
-var cube;
+let ladA;
 
 var board_positions = [];
 var broken_rows;
@@ -71,10 +82,10 @@ window.onload = function init() {
     scene.add(grid);
 
 
-    // Create Block
-    createBlock();
 
+    breakRows
 
+    ladA = new PieceZRev(scene);
 
 
     //Renderer
@@ -91,20 +102,17 @@ window.onload = function init() {
     const controls = new OrbitControls(camera, renderer.domElement, renderer, scene);
     controls.target.set(0, 0.1, 0);
     controls.update();
-    //controls.minDistance = 0.5;
-    //controls.maxDistance = 10;
     controls.maxPolarAngle = 0.5 * Math.PI;
 
     //Buttons
     document.getElementById("plus").onclick = function () {
-        console.log(speed);
-        speed += 0.01;
+        ladA.speed += 0.01;
     };
 
     document.getElementById("minus").onclick = function () {
         console.log(speed);
         if (speed > 0.0001) {
-            speed -= 0.01;
+            ladA.speed -= 0.01;
         }
     };
 
@@ -152,6 +160,9 @@ function breakRows(){
 
 const animate = function () {
 
+    ladA.fall();
+    requestAnimationFrame(animate);
+
     var col = cube.position.x;
     var row = 19 - (cube.position.y - 0.5);
     
@@ -185,13 +196,21 @@ const animate = function () {
     setTimeout(function(){
         requestAnimationFrame(animate);
     }, 500);
+    breakRows
     renderer.render(scene, camera);
     
 };
 
 function checkKey(e) {
-
     e = e || window.event;
+
+    if (ladA.getMinY() > 0.5) {
+        if (e.keyCode == '37') { // left arrow
+            ladA.moveLeft();
+        } else if (e.keyCode == '39') { // right arrow
+            ladA.moveRight();
+        } else if (e.keyCode == '32') { //space bar
+            ladA.rotate();
     var col = cube.position.x;
     var row = 19 - (cube.position.y - 0.5);
     // Only move left or right if within the 10 block space, above the ground plane, and there are no blocks next to it
@@ -206,8 +225,8 @@ function checkKey(e) {
             renderer.render(scene, camera);
         }
     }
-
 }
+
 
 
 function onWindowResize() {

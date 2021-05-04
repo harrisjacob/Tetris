@@ -74,9 +74,6 @@ window.onload = function init() {
     // Create Block
     createBlock();
 
-
-
-
     //Renderer
     renderer = new THREE.WebGLRenderer({
         antialias: true

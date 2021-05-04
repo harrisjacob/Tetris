@@ -30,7 +30,7 @@ function createBlock() {
     //    material.color = new THREE.Color(0xff0000);
 
     ladA = new PieceZRev(scene);
-    scene.add(ladA);
+
 
 }
 
@@ -72,11 +72,13 @@ window.onload = function init() {
         color: 0x999999,
         depthWrite: false
     }));
+    ground.position.y = -0.5
     ground.rotation.x = -Math.PI / 2;
     ground.receiveShadow = true;
     scene.add(ground);
 
     const grid = new THREE.GridHelper(50, 50, 0x888888, 0x888888);
+    grid.position.y = -0.5;
     scene.add(grid);
 
     createBlock();
@@ -156,18 +158,15 @@ function breakRows() {
 
 const animate = function () {
 
-    ladA.fall();
-    requestAnimationFrame(animate);
-
-    var leftCol = ladA.getLeftCol();
-    var rightCol = Math.round(ladA.getRightCol());
     var row = 19 - (ladA.getMinY());
+    let col;
 
-
+    console.log(ladA.getMinY());
     if (row < 19) {
         var shouldStop = false
         // Stop the block from falling if it should be stacked
-        for (var cube in ladA.cubeArray) {
+        for (var i in ladA.cubeArray) {
+            let cube = ladA.cubeArray[i];
             row = 19 - cube.cube.position.y;
             col = cube.cube.position.x;
             if (board_positions[row + 1][col] != 0 && !ladA.cubeArray.includes(board_positions[row + 1][col])) {
@@ -203,7 +202,7 @@ const animate = function () {
     setTimeout(function () {
         requestAnimationFrame(animate);
     }, 1000);
-    breakRows
+    breakRows();
     renderer.render(scene, camera);
 
 };
@@ -215,14 +214,17 @@ function checkKey(e) {
 
         if (e.keyCode == '32') { //space bar
             ladA.rotate();
+            renderer.render(scene, camera);
         }
         var leftCol = ladA.getLeftCol();
         var rightCol = ladA.getRightCol();
         var row = 19 - (ladA.getMinY() - 0.5);
+        let col;
 
         // Only move left or right if within the 10 block space, above the ground plane, and there are no blocks next to it
         if (e.keyCode == '37' && ladA.getLeftCol() >= 1) {
-            for (var cube in ladA.cubeArray) {
+            for (var i in ladA.cubeArray) {
+                let cube = ladA.cubeArray[i];
                 row = 19 - cube.cube.position.y;
                 col = cube.cube.position.x;
 
@@ -232,7 +234,8 @@ function checkKey(e) {
                 }
             }
         } else if (e.keyCode == '39' && ladA.getRightCol() < 9) {
-            for (var cube in ladA.cubeArray) {
+            for (var i in ladA.cubeArray) {
+                let cube = ladA.cubeArray[i];
                 row = 19 - cube.cube.position.y;
                 col = cube.cube.position.x;
                 if (board_positions[row][col + 1] == 0) {

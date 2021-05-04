@@ -17,23 +17,21 @@ import PieceZRev from './components/PieceZRev.js';
 
 let scene, camera, renderer;
 let speed = 1;
-let ladA;
+var ladA;
+
 
 var board_positions = [];
 var broken_rows;
 
-function createBlock(){
-    //Box Geometry
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshPhongMaterial()
-    material.color = new THREE.Color(0xff0000);
-    cube = new THREE.Mesh(geometry, material);
-    cube.castShadow = true;
-    cube.position.x = 4;
-    cube.position.y = 6.5;
-    cube.position.z = 0;
+function createBlock() {
+    //    //Box Geometry
+    //    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    //    const material = new THREE.MeshPhongMaterial()
+    //    material.color = new THREE.Color(0xff0000);
 
-    scene.add(cube);
+    ladA = new PieceZRev(scene);
+    scene.add(ladA);
+
 }
 
 window.onload = function init() {
@@ -81,11 +79,7 @@ window.onload = function init() {
     const grid = new THREE.GridHelper(50, 50, 0x888888, 0x888888);
     scene.add(grid);
 
-
-
-    breakRows
-
-    ladA = new PieceZRev(scene);
+    createBlock();
 
 
     //Renderer
@@ -104,20 +98,22 @@ window.onload = function init() {
     controls.update();
     controls.maxPolarAngle = 0.5 * Math.PI;
 
-    //Buttons
-    document.getElementById("plus").onclick = function () {
-        ladA.speed += 0.01;
-    };
-
-    document.getElementById("minus").onclick = function () {
-        console.log(speed);
-        if (speed > 0.0001) {
-            ladA.speed -= 0.01;
-        }
-    };
+    //    //Buttons
+    //    document.getElementById("plus").onclick = function () {
+    //        ladA.speed += 0.01;
+    //    };
+    //
+    //    document.getElementById("minus").onclick = function () {
+    //        console.log(speed);
+    //        if (speed > 0.0001) {
+    //            ladA.speed -= 0.01;
+    //        }
+    //    };
 
     // Initialize board positions
-    board_positions = (new Array(20)).fill().map(function(){ return new Array(10).fill(0);});
+    board_positions = (new Array(20)).fill().map(function () {
+        return new Array(10).fill(0);
+    });
 
     //Arrow Keys
     document.onkeydown = checkKey;
@@ -129,13 +125,13 @@ window.onload = function init() {
 }
 
 // Check if any row is full
-function breakRows(){
+function breakRows() {
     broken_rows = 0;
-    for(var i=0; i<board_positions.length; i++){
-        if(!board_positions[i].includes(0)){
+    for (var i = 0; i < board_positions.length; i++) {
+        if (!board_positions[i].includes(0)) {
             broken_rows++;
             // Delete full row and add empty row at the top
-            for(var j=0; j<board_positions[i].length; j++){
+            for (var j = 0; j < board_positions[i].length; j++) {
                 var to_delete = board_positions[i][j]
                 scene.remove(to_delete);
                 to_delete.geometry.dispose();
@@ -147,10 +143,10 @@ function breakRows(){
             board_positions.unshift(new Array(10).fill(0));
         }
     }
-    if(broken_rows>0){
-        for(var i=0; i<board_positions.length; i++){
-            for(var j=0; j<board_positions[i].length; j++){
-                if(board_positions[i][j] != 0){
+    if (broken_rows > 0) {
+        for (var i = 0; i < board_positions.length; i++) {
+            for (var j = 0; j < board_positions[i].length; j++) {
+                if (board_positions[i][j] != 0) {
                     board_positions[i][j].position.y -= broken_rows;
                 }
             }
@@ -163,66 +159,87 @@ const animate = function () {
     ladA.fall();
     requestAnimationFrame(animate);
 
-    var col = cube.position.x;
-    var row = 19 - (cube.position.y - 0.5);
-    
-    if (cube.position.y > 0.5) {
-        if(row < 19){
-            // Stop the block from falling if it should be stacked
-            if(board_positions[row+1][col] != 0){
-                board_positions[row][col] = cube;
-                breakRows();
-                createBlock();
-            } else {
-                cube.position.y -= 1; 
+    var leftCol = ladA.getLeftCol();
+    var rightCol = Math.round(ladA.getRightCol());
+    var row = 19 - (ladA.getMinY());
+
+
+    if (row < 19) {
+        var shouldStop = false
+        // Stop the block from falling if it should be stacked
+        for (var cube in ladA.cubeArray) {
+            row = 19 - cube.cube.position.y;
+            col = cube.cube.position.x;
+            if (board_positions[row + 1][col] != 0 && !ladA.cubeArray.includes(board_positions[row + 1][col])) {
+                shouldStop = true;
             }
-        } else {
-            
-            cube.position.y -= 1; 
         }
-        // cube.position.y -= speed * 0.01;
-    }
-    else{
+        if (!shouldStop) {
+            ladA.dropOne();
+        } else {
+            board_positions[19 - ladA.cubeA.cube.position.y][ladA.cubeA.cube.position.x] = ladA.cubeA.cube;
+            board_positions[19 - ladA.cubeB.cube.position.y][ladA.cubeB.cube.position.x] = ladA.cubeB.cube;
+            board_positions[19 - ladA.cubeC.cube.position.y][ladA.cubeC.cube.position.x] = ladA.cubeC.cube;
+            board_positions[19 - ladA.cubeD.cube.position.y][ladA.cubeD.cube.position.x] = ladA.cubeD.cube;
+
+            breakRows();
+            createBlock();
+        }
+    } else {
         // 2D position matrix starts with row 0 at the top, but real cube y position has 0 at plane level
         // So, subtract 19 to convert
-        board_positions[row][col] = cube;
-        console.log(board_positions);
+        board_positions[19 - ladA.cubeA.cube.position.y][ladA.cubeA.cube.position.x] = ladA.cubeA.cube;
+        board_positions[19 - ladA.cubeB.cube.position.y][ladA.cubeB.cube.position.x] = ladA.cubeB.cube;
+        board_positions[19 - ladA.cubeC.cube.position.y][ladA.cubeC.cube.position.x] = ladA.cubeC.cube;
+        board_positions[19 - ladA.cubeD.cube.position.y][ladA.cubeD.cube.position.x] = ladA.cubeD.cube;
+
         breakRows();
-        console.log(broken_rows);
         createBlock();
     }
 
+
+
     // Pause between renders to make the boxes drop incrementally
-    setTimeout(function(){
+    setTimeout(function () {
         requestAnimationFrame(animate);
-    }, 500);
+    }, 1000);
     breakRows
     renderer.render(scene, camera);
-    
+
 };
 
 function checkKey(e) {
     e = e || window.event;
 
     if (ladA.getMinY() > 0.5) {
-        if (e.keyCode == '37') { // left arrow
-            ladA.moveLeft();
-        } else if (e.keyCode == '39') { // right arrow
-            ladA.moveRight();
-        } else if (e.keyCode == '32') { //space bar
+
+        if (e.keyCode == '32') { //space bar
             ladA.rotate();
-    var col = cube.position.x;
-    var row = 19 - (cube.position.y - 0.5);
-    // Only move left or right if within the 10 block space, above the ground plane, and there are no blocks next to it
-    if (e.keyCode == '37' && cube.position.x >= 1 && cube.position.y > 0.5) {
-        if(board_positions[row][col-1]==0){
-            cube.position.x -= 1;
-            renderer.render(scene, camera);
         }
-    } else if (e.keyCode == '39' && cube.position.x < 9 && cube.position.y > 0.5 && board_positions[row][col]==0) {
-        if(board_positions[row][col+1]==0){
-            cube.position.x += 1;
-            renderer.render(scene, camera);
+        var leftCol = ladA.getLeftCol();
+        var rightCol = ladA.getRightCol();
+        var row = 19 - (ladA.getMinY() - 0.5);
+
+        // Only move left or right if within the 10 block space, above the ground plane, and there are no blocks next to it
+        if (e.keyCode == '37' && ladA.getLeftCol() >= 1) {
+            for (var cube in ladA.cubeArray) {
+                row = 19 - cube.cube.position.y;
+                col = cube.cube.position.x;
+
+                if (board_positions[row][col - 1] == 0) {
+                    ladA.moveLeft();
+                    renderer.render(scene, camera);
+                }
+            }
+        } else if (e.keyCode == '39' && ladA.getRightCol() < 9) {
+            for (var cube in ladA.cubeArray) {
+                row = 19 - cube.cube.position.y;
+                col = cube.cube.position.x;
+                if (board_positions[row][col + 1] == 0) {
+                    ladA.moveRight();
+                    renderer.render(scene, camera);
+                }
+            }
         }
     }
 }

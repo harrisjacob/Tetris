@@ -2,17 +2,17 @@
 
 export default class BasicPiece {
 
-	constructor(){
-		this.speed = 0.01;
+    constructor() {
+        this.speed = 0.01;
         this.currentRotation = 0;
-	};
+    };
 
     fall() {
         if (this.getMinY() > 0.5) {
-            this.cubeA.cube.position.y -= this.speed;
-            this.cubeB.cube.position.y -= this.speed;
-            this.cubeC.cube.position.y -= this.speed;
-            this.cubeD.cube.position.y -= this.speed;
+            this.cubeA.cube.position.y -= 1;
+            this.cubeB.cube.position.y -= 1;
+            this.cubeC.cube.position.y -= 1;
+            this.cubeD.cube.position.y -= 1;
         }
 
     };
@@ -20,7 +20,7 @@ export default class BasicPiece {
     rotate() {
 
         this.currentRotation = this.currentRotation % this.rotations.A.length; //Reset rotations counter to 0 upon max rotations
-        
+
         let rot = this.currentRotation;
         //A
         this.cubeA.cube.position.x += this.rotations.A[rot].x;
@@ -59,5 +59,20 @@ export default class BasicPiece {
     getMinY() {
         return Math.min(this.cubeA.cube.position.y, this.cubeB.cube.position.y, this.cubeC.cube.position.y, this.cubeD.cube.position.y)
     };
+
+    dropOne() {
+        this.cubeA.cube.position.y -= 1;
+        this.cubeB.cube.position.y -= 1;
+        this.cubeC.cube.position.y -= 1;
+        this.cubeD.cube.position.y -= 1;
+    }
+
+    getLeftCol() {
+        return Math.min(this.cubeA.cube.position.x, this.cubeB.cube.position.x, this.cubeC.cube.position.x, this.cubeD.cube.position.x)
+    }
+
+    getRightCol() {
+        return Math.max(this.cubeA.cube.position.x, this.cubeB.cube.position.x, this.cubeC.cube.position.x, this.cubeD.cube.position.x)
+    }
 
 };

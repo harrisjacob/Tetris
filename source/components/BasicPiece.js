@@ -3,7 +3,6 @@
 export default class BasicPiece {
 
     constructor() {
-        this.speed = 0.01;
         this.currentRotation = 0;
     };
 

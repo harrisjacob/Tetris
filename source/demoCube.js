@@ -16,7 +16,7 @@ import PieceZRev from './components/PieceZRev.js';
 
 
 let scene, camera, renderer;
-let speed = 1;
+let pause = 500;
 var ladA;
 
 
@@ -28,8 +28,30 @@ function createBlock() {
     //    const geometry = new THREE.BoxGeometry(1, 1, 1);
     //    const material = new THREE.MeshPhongMaterial()
     //    material.color = new THREE.Color(0xff0000);
-
-    ladA = new PieceZRev(scene);
+    switch(Math.floor(Math.random() * 7)) {
+        case 0:
+            ladA = new PieceI(scene);
+            break;
+        case 1:
+            ladA = new PieceL(scene);
+            break;
+        case 2:
+            ladA = new PieceLRev(scene);
+            break;
+        case 3:
+            ladA = new PieceO(scene);
+            break;
+        case 4:
+            ladA = new PieceT(scene);
+            break;
+        case 5:
+            ladA = new PieceZ(scene);
+            break;
+        case 6:
+            ladA = new PieceZRev(scene);
+            break;
+    }
+            
 
 
 }
@@ -100,17 +122,18 @@ window.onload = function init() {
     controls.update();
     controls.maxPolarAngle = 0.5 * Math.PI;
 
-    //    //Buttons
-    //    document.getElementById("plus").onclick = function () {
-    //        ladA.speed += 0.01;
-    //    };
-    //
-    //    document.getElementById("minus").onclick = function () {
-    //        console.log(speed);
-    //        if (speed > 0.0001) {
-    //            ladA.speed -= 0.01;
-    //        }
-    //    };
+       //Buttons
+       document.getElementById("plus").onclick = function () {
+            if (pause > 200) {
+                pause -= 200;
+            }
+       };
+    
+       document.getElementById("minus").onclick = function () {
+            if (pause < 1200) {
+                pause += 200;
+            }
+       };
 
     // Initialize board positions
     board_positions = (new Array(20)).fill().map(function () {
@@ -143,6 +166,8 @@ function breakRows() {
             }
             board_positions.splice(i, 1);
             // TODO: Add to the score for the broken row
+            document.getElementById("score").innerHTML = "Score: " + (parseInt(document.getElementById("score").title) + 1).toString();
+            document.getElementById("score").title = (parseInt(document.getElementById("score").title) + 1).toString();
             board_positions.unshift(new Array(10).fill(0));
         }
     }
@@ -158,6 +183,7 @@ function breakRows() {
     }
 }
 
+// Check if the block can move down or needs to stop
 function checkDescent() {
     var row = 19 - (ladA.getMinY());
     let col;
@@ -177,13 +203,24 @@ function checkDescent() {
             
             ladA.dropOne();
         } else {
-            board_positions[19 - ladA.cubeA.cube.position.y][ladA.cubeA.cube.position.x] = ladA.cubeA.cube;
-            board_positions[19 - ladA.cubeB.cube.position.y][ladA.cubeB.cube.position.x] = ladA.cubeB.cube;
-            board_positions[19 - ladA.cubeC.cube.position.y][ladA.cubeC.cube.position.x] = ladA.cubeC.cube;
-            board_positions[19 - ladA.cubeD.cube.position.y][ladA.cubeD.cube.position.x] = ladA.cubeD.cube;
+            let a_y = 19 - ladA.cubeA.cube.position.y;
+            let b_y = 19 - ladA.cubeB.cube.position.y;
+            let c_y = 19 - ladA.cubeC.cube.position.y;
+            let d_y = 19 - ladA.cubeD.cube.position.y
+            // Ends the game if the blocks are stacked too high
+            // TODO : stop the animation, display game over screen?
+            if(a_y < 0 || b_y < 0 || c_y < 0 || d_y < 0){
+                console.log("GAME OVER");
+                pause = 1000000;
+            } else {
+                board_positions[a_y][ladA.cubeA.cube.position.x] = ladA.cubeA.cube;
+                board_positions[b_y][ladA.cubeB.cube.position.x] = ladA.cubeB.cube;
+                board_positions[c_y][ladA.cubeC.cube.position.x] = ladA.cubeC.cube;
+                board_positions[d_y][ladA.cubeD.cube.position.x] = ladA.cubeD.cube;
 
-            breakRows();
-            createBlock();
+                breakRows();
+                createBlock();
+            }
         }
     } else {
         // 2D position matrix starts with row 0 at the top, but real cube y position has 0 at plane level
@@ -205,7 +242,7 @@ const animate = function () {
     // Pause between renders to make the boxes drop incrementally
     setTimeout(function () {
         requestAnimationFrame(animate);
-    }, 500);
+    }, pause);
     breakRows();
     renderer.render(scene, camera);
 
@@ -220,8 +257,6 @@ function checkKey(e) {
             ladA.rotate();
             renderer.render(scene, camera);
         }
-        var leftCol = ladA.getLeftCol();
-        var rightCol = ladA.getRightCol();
         var row = 19 - (ladA.getMinY() - 0.5);
         let col;
 
@@ -255,6 +290,7 @@ function checkKey(e) {
                 renderer.render(scene, camera);
             }
         } else if (e.keyCode == '40'){
+            // Move block down faster
             checkDescent();
             renderer.render(scene, camera);
         }

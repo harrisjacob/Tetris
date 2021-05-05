@@ -6,10 +6,10 @@ export default class PieceZRev extends BasicPiece {
     constructor(scene) {
         super();
 
-        this.cubeA = new Block(scene, 4, 7, 0);
-        this.cubeB = new Block(scene, 5, 7, 0);
-        this.cubeC = new Block(scene, 5, 8, 0);
-        this.cubeD = new Block(scene, 6, 8, 0);
+        this.cubeA = new Block(scene, 4, 19, 0);
+        this.cubeB = new Block(scene, 5, 19, 0);
+        this.cubeC = new Block(scene, 5, 20, 0);
+        this.cubeD = new Block(scene, 6, 20, 0);
         this.cubeArray = [this.cubeA, this.cubeB, this.cubeC, this.cubeD];
 
         this.rotations = {

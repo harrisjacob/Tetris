@@ -129,6 +129,7 @@ window.onload = function init() {
 // Check if any row is full
 function breakRows() {
     broken_rows = 0;
+    let bottom_broken_row = null;
     for (var i = 0; i < board_positions.length; i++) {
         if (!board_positions[i].includes(0)) {
             broken_rows++;
@@ -138,16 +139,17 @@ function breakRows() {
                 scene.remove(to_delete);
                 to_delete.geometry.dispose();
                 to_delete.material.dispose();
+                bottom_broken_row = i;
             }
             board_positions.splice(i, 1);
             // TODO: Add to the score for the broken row
-            // TODO: function call to delete the ith row of boxese visually from the scene
             board_positions.unshift(new Array(10).fill(0));
         }
     }
+    // Move the rows above the broken ones down
     if (broken_rows > 0) {
-        for (var i = 0; i < board_positions.length; i++) {
-            for (var j = 0; j < board_positions[i].length; j++) {
+        for (var i = 0; i <= bottom_broken_row; i++) {
+            for (var j = 0; j < board_positions[i].length; j++) {                
                 if (board_positions[i][j] != 0) {
                     board_positions[i][j].position.y -= broken_rows;
                 }
@@ -156,12 +158,10 @@ function breakRows() {
     }
 }
 
-const animate = function () {
-
+function checkDescent() {
     var row = 19 - (ladA.getMinY());
     let col;
 
-    console.log(ladA.getMinY());
     if (row < 19) {
         var shouldStop = false
         // Stop the block from falling if it should be stacked
@@ -174,6 +174,7 @@ const animate = function () {
             }
         }
         if (!shouldStop) {
+            
             ladA.dropOne();
         } else {
             board_positions[19 - ladA.cubeA.cube.position.y][ladA.cubeA.cube.position.x] = ladA.cubeA.cube;
@@ -195,13 +196,16 @@ const animate = function () {
         breakRows();
         createBlock();
     }
+}
 
+const animate = function () {
 
+    checkDescent();
 
     // Pause between renders to make the boxes drop incrementally
     setTimeout(function () {
         requestAnimationFrame(animate);
-    }, 1000);
+    }, 500);
     breakRows();
     renderer.render(scene, camera);
 
@@ -223,26 +227,36 @@ function checkKey(e) {
 
         // Only move left or right if within the 10 block space, above the ground plane, and there are no blocks next to it
         if (e.keyCode == '37' && ladA.getLeftCol() >= 1) {
+            let goLeft = true;
             for (var i in ladA.cubeArray) {
                 let cube = ladA.cubeArray[i];
                 row = 19 - cube.cube.position.y;
                 col = cube.cube.position.x;
-
-                if (board_positions[row][col - 1] == 0) {
-                    ladA.moveLeft();
-                    renderer.render(scene, camera);
+                if (board_positions[row][col - 1] != 0) {
+                    goLeft = false;
                 }
+            }
+            if(goLeft){
+                ladA.moveLeft();
+                renderer.render(scene, camera);
             }
         } else if (e.keyCode == '39' && ladA.getRightCol() < 9) {
+            let goRight = true;
             for (var i in ladA.cubeArray) {
                 let cube = ladA.cubeArray[i];
                 row = 19 - cube.cube.position.y;
                 col = cube.cube.position.x;
-                if (board_positions[row][col + 1] == 0) {
-                    ladA.moveRight();
-                    renderer.render(scene, camera);
+                if (board_positions[row][col + 1] != 0) {
+                    goRight = false;
                 }
             }
+            if(goRight){
+                ladA.moveRight();
+                renderer.render(scene, camera);
+            }
+        } else if (e.keyCode == '40'){
+            checkDescent();
+            renderer.render(scene, camera);
         }
     }
 }

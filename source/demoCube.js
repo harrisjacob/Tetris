@@ -166,8 +166,10 @@ function breakRows() {
             }
             board_positions.splice(i, 1);
             // TODO: Add to the score for the broken row
-            document.getElementById("score").innerHTML = "Score: " + (parseInt(document.getElementById("score").title) + 1).toString();
-            document.getElementById("score").title = (parseInt(document.getElementById("score").title) + 1).toString();
+            //            document.getElementById("score").innerHTML = "Score: " + (parseInt(document.getElementById("score").title) + 1).toString();
+            //            document.getElementById("score").title = (parseInt(document.getElementById("score").title) + 1).toString();
+            document.getElementById("scoreNum").innerHTML = (parseInt(document.getElementById("scoreNum").textContent) + 1).toString();
+
             board_positions.unshift(new Array(10).fill(0));
         }
     }

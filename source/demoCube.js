@@ -28,7 +28,7 @@ function createBlock() {
     //    const geometry = new THREE.BoxGeometry(1, 1, 1);
     //    const material = new THREE.MeshPhongMaterial()
     //    material.color = new THREE.Color(0xff0000);
-    switch(Math.floor(Math.random() * 7)) {
+    switch (Math.floor(Math.random() * 7)) {
         case 0:
             ladA = new PieceI(scene);
             break;
@@ -51,7 +51,7 @@ function createBlock() {
             ladA = new PieceZRev(scene);
             break;
     }
-            
+
 
 
 }
@@ -122,18 +122,18 @@ window.onload = function init() {
     controls.update();
     controls.maxPolarAngle = 0.5 * Math.PI;
 
-       //Buttons
-       document.getElementById("plus").onclick = function () {
-            if (pause > 200) {
-                pause -= 200;
-            }
-       };
-    
-       document.getElementById("minus").onclick = function () {
-            if (pause < 1200) {
-                pause += 200;
-            }
-       };
+    //Buttons
+    document.getElementById("plus").onclick = function () {
+        if (pause > 200) {
+            pause -= 200;
+        }
+    };
+
+    document.getElementById("minus").onclick = function () {
+        if (pause < 1200) {
+            pause += 200;
+        }
+    };
 
     // Initialize board positions
     board_positions = (new Array(20)).fill().map(function () {
@@ -174,7 +174,7 @@ function breakRows() {
     // Move the rows above the broken ones down
     if (broken_rows > 0) {
         for (var i = 0; i <= bottom_broken_row; i++) {
-            for (var j = 0; j < board_positions[i].length; j++) {                
+            for (var j = 0; j < board_positions[i].length; j++) {
                 if (board_positions[i][j] != 0) {
                     board_positions[i][j].position.y -= broken_rows;
                 }
@@ -200,7 +200,7 @@ function checkDescent() {
             }
         }
         if (!shouldStop) {
-            
+
             ladA.dropOne();
         } else {
             let a_y = 19 - ladA.cubeA.cube.position.y;
@@ -209,7 +209,7 @@ function checkDescent() {
             let d_y = 19 - ladA.cubeD.cube.position.y
             // Ends the game if the blocks are stacked too high
             // TODO : stop the animation, display game over screen?
-            if(a_y < 0 || b_y < 0 || c_y < 0 || d_y < 0){
+            if (a_y < 0 || b_y < 0 || c_y < 0 || d_y < 0) {
                 console.log("GAME OVER");
                 pause = 1000000;
             } else {
@@ -253,9 +253,47 @@ function checkKey(e) {
 
     if (ladA.getMinY() > 0.5) {
 
+        // only rotate if there is space 
+
         if (e.keyCode == '32') { //space bar
-            ladA.rotate();
-            renderer.render(scene, camera);
+            let shouldRotate = true;
+            for (var i in ladA.cubeArray) {
+                let cube = ladA.cubeArray[i];
+                let newCol;
+                let newRow;
+                switch (i) {
+                    case "0":
+                        newCol = cube.cube.position.x + ladA.rotations.A[ladA.currentRotation % 4].x;
+                        newRow = cube.cube.position.y + ladA.rotations.A[ladA.currentRotation % 4].y;
+                        break;
+                    case "1":
+                        newCol = cube.cube.position.x + ladA.rotations.B[ladA.currentRotation % 4].x;
+                        newRow = cube.cube.position.y + ladA.rotations.B[ladA.currentRotation % 4].y;
+                        break;
+                    case "2":
+                        newCol = cube.cube.position.x + ladA.rotations.C[ladA.currentRotation % 4].x;
+                        newRow = cube.cube.position.y + ladA.rotations.C[ladA.currentRotation % 4].y;
+                        break;
+                    case "3":
+                        newCol = cube.cube.position.x + ladA.rotations.D[ladA.currentRotation % 4].x;
+                        newRow = cube.cube.position.y + ladA.rotations.D[ladA.currentRotation % 4].y;
+                        break;
+                    default:
+                        break;
+                }
+                console.log("x: " + newCol + " y: " + newRow);
+                if (board_positions[19 - newRow][newCol] != 0 || newCol > 9 || newCol < 0) {
+
+                    console.log("can't rotate!");
+                    shouldRotate = false;
+                }
+            }
+            console.log(board_positions);
+
+            if (shouldRotate) {
+                ladA.rotate();
+                renderer.render(scene, camera);
+            }
         }
         var row = 19 - (ladA.getMinY() - 0.5);
         let col;
@@ -271,7 +309,7 @@ function checkKey(e) {
                     goLeft = false;
                 }
             }
-            if(goLeft){
+            if (goLeft) {
                 ladA.moveLeft();
                 renderer.render(scene, camera);
             }
@@ -285,11 +323,11 @@ function checkKey(e) {
                     goRight = false;
                 }
             }
-            if(goRight){
+            if (goRight) {
                 ladA.moveRight();
                 renderer.render(scene, camera);
             }
-        } else if (e.keyCode == '40'){
+        } else if (e.keyCode == '40') {
             // Move block down faster
             checkDescent();
             renderer.render(scene, camera);

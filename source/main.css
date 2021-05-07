@@ -5,7 +5,8 @@ body {
 	font-family: Monospace;
 	font-size: 13px;
 	line-height: 24px;
-	overscroll-behavior: none;
+	overflow: hidden;
+	/*overscroll-behavior: none;*/
 }
 
 a {

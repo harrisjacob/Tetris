@@ -63,7 +63,7 @@ window.onload = function init() {
 
     //Set up camera
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(3, 2, 16); // obj.position.set is for moving obj around the scene.  Not related to the camera specifically
+    camera.position.set(5, 20, 60);
 
 
     //Set up Scene
@@ -118,7 +118,7 @@ window.onload = function init() {
 
     //Trackball
     const controls = new OrbitControls(camera, renderer.domElement, renderer, scene);
-    controls.target.set(0, 0.1, 0);
+    controls.target.set(5, 0, 0);
     controls.update();
     controls.maxPolarAngle = 0.5 * Math.PI;
 

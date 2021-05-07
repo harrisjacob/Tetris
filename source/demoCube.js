@@ -212,7 +212,6 @@ function checkDescent() {
             // Ends the game if the blocks are stacked too high
             // TODO : stop the animation, display game over screen?
             if (a_y < 0 || b_y < 0 || c_y < 0 || d_y < 0) {
-                console.log("GAME OVER");
                 pause = 1000000;
             } else {
                 board_positions[a_y][ladA.cubeA.cube.position.x] = ladA.cubeA.cube;
@@ -283,14 +282,11 @@ function checkKey(e) {
                     default:
                         break;
                 }
-                console.log("x: " + newCol + " y: " + newRow);
                 if (board_positions[19 - newRow][newCol] != 0 || newCol > 9 || newCol < 0) {
 
-                    console.log("can't rotate!");
                     shouldRotate = false;
                 }
             }
-            console.log(board_positions);
 
             if (shouldRotate) {
                 ladA.rotate();

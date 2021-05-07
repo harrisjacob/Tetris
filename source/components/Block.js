@@ -2,10 +2,10 @@ import * as THREE from '../../build/three.module.js';
 
 export default class Block {
 	
-	constructor(scene, x, y, z) {
+	constructor(scene, x, y, z, color) {
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshPhongMaterial()
-        material.color = new THREE.Color(0xff0000);
+        material.color = color;
 
         this.cube = new THREE.Mesh(geometry, material);
         this.cube.position.x = x;

@@ -73,7 +73,7 @@ window.onload = function init() {
 
 
     //Lighting
-    const hemiLight = new THREE.HemisphereLight(0xff0000, 0x000000); //params: Sky color, ground color, [intensity = 1.0]
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x000000); //params: Sky color, ground color, [intensity = 1.0]
     hemiLight.position.set(0, 20, 0);
     scene.add(hemiLight);
 

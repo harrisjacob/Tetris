@@ -8,10 +8,12 @@ export default class PieceI extends BasicPiece {
     constructor(scene) {
         super();
 
-        this.cubeA = new Block(scene, 4, 20, 0);
-        this.cubeB = new Block(scene, 5, 20, 0);
-        this.cubeC = new Block(scene, 6, 20, 0);
-        this.cubeD = new Block(scene, 7, 20, 0);
+        let color = new THREE.Color(0x00ffff);
+
+        this.cubeA = new Block(scene, 4, 20, 0, color);
+        this.cubeB = new Block(scene, 5, 20, 0, color);
+        this.cubeC = new Block(scene, 6, 20, 0, color);
+        this.cubeD = new Block(scene, 7, 20, 0, color);
         this.cubeArray = [this.cubeA, this.cubeB, this.cubeC, this.cubeD];
 
 

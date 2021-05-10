@@ -161,7 +161,6 @@ function breakRows() {
                 var to_delete = board_positions[i][j]
                 scene.remove(to_delete);
                 to_delete.geometry.dispose();
-                to_delete.material.dispose();
                 bottom_broken_row = i;
             }
             board_positions.splice(i, 1);
@@ -197,7 +196,7 @@ function checkDescent() {
             let cube = ladA.cubeArray[i];
             row = 19 - cube.cube.position.y;
             col = cube.cube.position.x;
-            if (board_positions[row + 1][col] != 0 && !ladA.cubeArray.includes(board_positions[row + 1][col])) {
+            if (row > -1 && board_positions[row + 1][col] != 0 && !ladA.cubeArray.includes(board_positions[row + 1][col])) {
                 shouldStop = true;
             }
         }
@@ -258,6 +257,7 @@ function checkKey(e) {
 
         if (e.keyCode == '32') { //space bar
             let shouldRotate = true;
+
             for (var i in ladA.cubeArray) {
                 let cube = ladA.cubeArray[i];
                 let newCol;
@@ -282,8 +282,8 @@ function checkKey(e) {
                     default:
                         break;
                 }
-                if (board_positions[19 - newRow][newCol] != 0 || newCol > 9 || newCol < 0) {
-
+                console.log("y: " + newRow + " x: " + newCol);
+                if (newRow < 20 && board_positions[19 - newRow][newCol] != 0 || newCol > 9 || newCol < 0) {
                     shouldRotate = false;
                 }
             }

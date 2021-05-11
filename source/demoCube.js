@@ -1,8 +1,6 @@
 import * as THREE from '../build/three.module.js';
 
-import {
-    OrbitControls
-} from './jsm/controls/OrbitControls.js';
+import { OrbitControls } from './jsm/controls/OrbitControls.js';
 
 //Game Pieces
 import PieceI from './components/PieceI.js';
@@ -12,6 +10,9 @@ import PieceO from './components/PieceO.js';
 import PieceT from './components/PieceT.js';
 import PieceZ from './components/PieceZ.js';
 import PieceZRev from './components/PieceZRev.js';
+
+import Board from './components/Board.js';
+
 
 
 
@@ -63,7 +64,7 @@ window.onload = function init() {
 
     //Set up camera
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(5, 20, 60);
+    camera.position.set(5, 20, 40);
 
 
     //Set up Scene
@@ -90,18 +91,19 @@ window.onload = function init() {
 
 
     //Plane Geometry
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.MeshPhongMaterial({
-        color: 0x999999,
-        depthWrite: false
-    }));
-    ground.position.y = -0.5
-    ground.rotation.x = -Math.PI / 2;
-    ground.receiveShadow = true;
-    scene.add(ground);
+    // const ground = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.MeshPhongMaterial({
+    //     color: 0x999999,
+    //     depthWrite: false
+    // }));
+    // ground.position.y = -0.5
+    // ground.rotation.x = -Math.PI / 2;
+    // ground.receiveShadow = true;
+    // scene.add(ground);
 
-    const grid = new THREE.GridHelper(50, 50, 0x888888, 0x888888);
-    grid.position.y = -0.5;
-    scene.add(grid);
+    // const grid = new THREE.GridHelper(50, 50, 0x888888, 0x888888);
+    // grid.position.y = -0.5;
+    // scene.add(grid);
+    const board = new Board(scene);
 
     createBlock();
 
@@ -118,7 +120,7 @@ window.onload = function init() {
 
     //Trackball
     const controls = new OrbitControls(camera, renderer.domElement, renderer, scene);
-    controls.target.set(5, 0, 0);
+    controls.target.set(5, 5, 0);
     controls.update();
     controls.maxPolarAngle = 0.5 * Math.PI;
 

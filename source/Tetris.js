@@ -89,20 +89,6 @@ window.onload = function init() {
     dirLight.shadow.camera.far = 20;
     scene.add(dirLight);
 
-
-    //Plane Geometry
-    // const ground = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), new THREE.MeshPhongMaterial({
-    //     color: 0x999999,
-    //     depthWrite: false
-    // }));
-    // ground.position.y = -0.5
-    // ground.rotation.x = -Math.PI / 2;
-    // ground.receiveShadow = true;
-    // scene.add(ground);
-
-    // const grid = new THREE.GridHelper(50, 50, 0x888888, 0x888888);
-    // grid.position.y = -0.5;
-    // scene.add(grid);
     const board = new Board(scene);
 
     createBlock();
@@ -166,9 +152,6 @@ function breakRows() {
                 bottom_broken_row = i;
             }
             board_positions.splice(i, 1);
-            // TODO: Add to the score for the broken row
-            //            document.getElementById("score").innerHTML = "Score: " + (parseInt(document.getElementById("score").title) + 1).toString();
-            //            document.getElementById("score").title = (parseInt(document.getElementById("score").title) + 1).toString();
             document.getElementById("scoreNum").innerHTML = (parseInt(document.getElementById("scoreNum").textContent) + 1).toString();
 
             board_positions.unshift(new Array(10).fill(0));
@@ -211,7 +194,6 @@ function checkDescent() {
             let c_y = 19 - ladA.cubeC.cube.position.y;
             let d_y = 19 - ladA.cubeD.cube.position.y
             // Ends the game if the blocks are stacked too high
-            // TODO : stop the animation, display game over screen?
             if (a_y < 0 || b_y < 0 || c_y < 0 || d_y < 0) {
                 pause = 1000000;
             } else {
